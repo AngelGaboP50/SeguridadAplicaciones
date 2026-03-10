@@ -12,7 +12,7 @@
                     <span>{{ item.label }}</span>
                 </ng-template>
             </p-selectButton>
-            <p-button label="Crear ticket" icon="pi pi-plus"></p-button>
+            <p-button label="Crear ticket" icon="pi pi-plus" (onClick)="openCreateTicket()"></p-button>
         </div>
     </header>
 
@@ -325,6 +325,49 @@
             <p-button label="Descartar" icon="pi pi-times" [text]="true" severity="secondary"
                 (onClick)="cancelEdit()"></p-button>
             <p-button label="Guardar" icon="pi pi-check" [text]="true" (onClick)="saveTicket()"></p-button>
+        </ng-template>
+    </p-dialog>
+
+    <!-- Modal Crear Ticket -->
+    <p-dialog [(visible)]="createDialogVisible" [modal]="true" [style]="{ width: '550px', maxWidth: '95vw' }"
+        header="Crear Nuevo Ticket" [draggable]="false" [resizable]="false">
+        <div class="flex flex-column gap-3 mt-3">
+            <div class="flex flex-column gap-2">
+                <label for="newTitle" class="font-semibold">Título *</label>
+                <input pInputText id="newTitle" [(ngModel)]="newTicket.title"
+                    placeholder="Ej: Error en login de usuario" class="w-full" />
+            </div>
+
+            <div class="flex flex-column gap-2">
+                <label for="newDesc" class="font-semibold">Descripción</label>
+                <textarea pTextarea id="newDesc" [(ngModel)]="newTicket.description" rows="4"
+                    placeholder="Detalles del ticket..." class="w-full"></textarea>
+            </div>
+
+            <div class="flex gap-4">
+                <div class="flex-1 flex flex-column gap-2">
+                    <label for="newState" class="font-semibold">Estado Inicial</label>
+                    <p-select [options]="stateOptions" [(ngModel)]="newTicket.state" optionLabel="label"
+                        optionValue="value" appendTo="body" styleClass="w-full"></p-select>
+                </div>
+                <div class="flex-1 flex flex-column gap-2">
+                    <label for="newPriority" class="font-semibold">Prioridad</label>
+                    <p-select [options]="priorityOptions" [(ngModel)]="newTicket.priority" optionLabel="label"
+                        optionValue="value" appendTo="body" styleClass="w-full"></p-select>
+                </div>
+            </div>
+
+            <div class="flex flex-column gap-2">
+                <label for="newAssignee" class="font-semibold">Asignado a (Email)</label>
+                <input pInputText id="newAssignee" [(ngModel)]="newTicket.assignee" placeholder="ejemplo@correo.com"
+                    class="w-full" />
+            </div>
+        </div>
+        <ng-template pTemplate="footer">
+            <p-button label="Cancelar" icon="pi pi-times" [text]="true" severity="secondary"
+                (onClick)="createDialogVisible = false"></p-button>
+            <p-button label="Crear Ticket" icon="pi pi-check" (onClick)="confirmCreateTicket()"
+                [disabled]="!newTicket.title"></p-button>
         </ng-template>
     </p-dialog>
 </div>

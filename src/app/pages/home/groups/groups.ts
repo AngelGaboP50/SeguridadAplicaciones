@@ -84,7 +84,7 @@ export class Groups {
         { email: 'admin3@ejemplo.com', name: 'Admin Tres' }
       ],
       tickets: 12,
-      descripcion: 'Acceso total al sistema (demo).',
+      descripcion: 'Acceso total al sistema.',
       estatus: 'Activo'
     },
     {
@@ -96,7 +96,7 @@ export class Groups {
         { email: 'ventas2@ejemplo.com', name: 'Carlos Ventas' }
       ],
       tickets: 7,
-      descripcion: 'Gestión de ventas y reportes (demo).',
+      descripcion: 'Gestión de ventas y reportes.',
       estatus: 'Activo'
     },
     {
@@ -108,7 +108,7 @@ export class Groups {
         { email: 'soporte2@ejemplo.com', name: 'Luis Soporte' }
       ],
       tickets: 21,
-      descripcion: 'Atención a incidencias (demo).',
+      descripcion: 'Atención a incidencias.',
       estatus: 'Activo'
     },
     {
@@ -119,7 +119,7 @@ export class Groups {
         { email: 'invitado1@ejemplo.com', name: 'Invitado Uno' }
       ],
       tickets: 0,
-      descripcion: 'Acceso limitado (demo).',
+      descripcion: 'Acceso limitado.',
       estatus: 'Pausado'
     }
   ];
@@ -139,7 +139,7 @@ export class Groups {
     }
   }
 
-  // --- Modal demo (CRUD visual)
+  // --- Modal  (CRUD visual)
   dialogOpen = false;
   isEdit = false;
   editIndex = -1;

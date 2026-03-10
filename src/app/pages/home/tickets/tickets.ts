@@ -126,6 +126,9 @@ export class Tickets {
   ];
   viewMode: 'kanban' | 'list' = 'kanban';
 
+  createDialogVisible = false;
+  newTicket: Partial<Ticket> = {};
+
   editDialogVisible = false;
   selectedTicket: Ticket | null = null;
   editingTicket: Partial<Ticket> = {};
@@ -141,6 +144,42 @@ export class Tickets {
   get canEditStatusOnly(): boolean {
     if (!this.selectedTicket) return false;
     return this.currentUser.email === this.selectedTicket.assignee && !this.canEditFull;
+  }
+
+  openCreateTicket() {
+    this.newTicket = {
+      title: '',
+      description: '',
+      state: 'Pendiente',
+      assignee: this.currentUser.email,
+      priority: 'Media',
+      createdAt: new Date().toISOString().split('T')[0]
+    };
+    this.createDialogVisible = true;
+  }
+
+  confirmCreateTicket() {
+    if (!this.newTicket.title) return; // Basic validation
+
+    const created: Ticket = {
+      id: `TCK-${Math.floor(Math.random() * 900) + 100}`,
+      title: this.newTicket.title || 'Nuevo Ticket',
+      state: this.newTicket.state as any || 'Pendiente',
+      createdBy: this.currentUser.email,
+      assignee: this.newTicket.assignee || '',
+      priority: this.newTicket.priority as any || 'Media',
+      createdAt: new Date().toISOString().split('T')[0],
+      description: this.newTicket.description,
+      comments: [],
+      history: [{ actor: this.currentUser.email, action: 'Ticket creado', date: new Date().toISOString() }]
+    };
+
+    // Replace the array reference so computed/getters recalculate
+    this.tickets = [created, ...this.tickets];
+    this.createDialogVisible = false;
+
+    // Automatically open the detail view of the new ticket
+    this.openTicket(created);
   }
 
   openTicket(ticket: Ticket) {

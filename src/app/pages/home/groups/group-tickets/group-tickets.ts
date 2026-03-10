@@ -127,6 +127,9 @@ export class GroupTickets implements OnInit {
   ];
   viewMode: 'kanban' | 'list' = 'kanban';
 
+  createDialogVisible = false;
+  newTicket: Partial<TicketItem> = {};
+
   editDialogVisible = false;
   selectedTicket: TicketItem | null = null;
   editingTicket: Partial<TicketItem> = {};
@@ -294,6 +297,40 @@ export class GroupTickets implements OnInit {
 
   createTicket() {
     if (!this.selectedGroup) return;
-    alert(`Función para crear nuevo ticket para el grupo: ${this.selectedGroup.nombre}`);
+    this.newTicket = {
+      title: '',
+      description: '',
+      state: 'Pendiente',
+      assignee: this.currentUser.email,
+      priority: 'Media',
+      createdAt: new Date().toISOString().split('T')[0],
+      groupId: this.selectedGroup.id
+    };
+    this.createDialogVisible = true;
+  }
+
+  confirmCreateTicket() {
+    if (!this.newTicket.title || !this.selectedGroup) return;
+
+    const created: TicketItem = {
+      id: `TCK-${Math.floor(Math.random() * 900) + 100}`,
+      groupId: this.selectedGroup.id,
+      title: this.newTicket.title || 'Nuevo Ticket',
+      state: this.newTicket.state as any || 'Pendiente',
+      createdBy: this.currentUser.email,
+      assignee: this.newTicket.assignee || '',
+      priority: this.newTicket.priority as any || 'Media',
+      createdAt: new Date().toISOString().split('T')[0],
+      description: this.newTicket.description,
+      comments: [],
+      history: [{ actor: this.currentUser.email, action: 'Ticket creado', date: new Date().toISOString() }]
+    };
+
+    this.allTickets = [created, ...this.allTickets];
+    this.createDialogVisible = false;
+    this.refreshGroupTickets();
+
+    // Automatically open the detail view of the new ticket
+    this.openTicket(created);
   }
 }
