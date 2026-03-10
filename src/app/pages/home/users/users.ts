@@ -23,6 +23,16 @@ import { AuthService } from '../../../services/auth.service';
 type Role = 'admin' | 'user';
 type Status = 'Activo' | 'Pausado' | 'Inactivo';
 
+export interface UserTicket {
+  id: string;
+  title: string;
+  description: string;
+  state: 'Pendiente' | 'En progreso' | 'Revisión' | 'Hecho' | 'Bloqueado';
+  priority: string;
+  assignee: string;
+  dueDate: string;
+}
+
 @Component({
   selector: 'app-users',
   standalone: true,
@@ -139,5 +149,59 @@ export class Users {
         'user:view', 'users:view', 'user:edit', 'user:add', 'user:delete'
       ]
     };
+  }
+
+  // --- MOCK TICKETS ---
+  assignedTickets: UserTicket[] = [
+    {
+      id: 'TK-1001',
+      title: 'Actualizar dependencias del proyecto',
+      description: 'Llevar Angular a la última versión',
+      state: 'Pendiente',
+      priority: 'Alta (Alta)',
+      assignee: 'Panso TIC',
+      dueDate: '2026-03-15'
+    },
+    {
+      id: 'TK-1002',
+      title: 'Corregir error de login',
+      description: 'El token expira muy rápido',
+      state: 'En progreso',
+      priority: 'Urgente (Urgente)',
+      assignee: 'Panso TIC',
+      dueDate: '2026-03-11'
+    },
+    {
+      id: 'TK-1003',
+      title: 'Rediseñar vista de usuarios',
+      description: 'Añadir la sección de tickets asignados',
+      state: 'Hecho',
+      priority: 'Media (Media)',
+      assignee: 'Panso TIC',
+      dueDate: '2026-03-10'
+    },
+    {
+      id: 'TK-1004',
+      title: 'Validar permisos en API',
+      description: 'Revisar endpoints',
+      state: 'Pendiente',
+      priority: 'Baja (Baja)',
+      assignee: 'Panso TIC',
+      dueDate: '2026-03-20'
+    }
+  ];
+
+  // --- COMPUTED SUMMARIES ---
+  get totalTickets() { return this.assignedTickets.length; }
+  get pendingTickets() { return this.assignedTickets.filter(t => t.state === 'Pendiente').length; }
+  get progressTickets() { return this.assignedTickets.filter(t => t.state === 'En progreso').length; }
+  get doneTickets() { return this.assignedTickets.filter(t => t.state === 'Hecho').length; }
+  get blockedTickets() { return this.assignedTickets.filter(t => t.state === 'Bloqueado').length; }
+
+  getPrioritySeverity(priority: string): TagSeverity {
+    if (priority.includes('Urgente')) return 'danger';
+    if (priority.includes('Alta')) return 'warn';
+    if (priority.includes('Baja')) return 'info';
+    return 'success';
   }
 }
